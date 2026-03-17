@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AIS Admin — Member Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --burg:#8b2e15;--burg-lt:#a83b1e;--navy:#0f1b2d;--navy2:#162638;
+  --cream:#faf6f0;--offwhite:#f3ede4;--white:#fff;
+  --ink:#111;--gray:#6b6560;--gray-lt:#a09890;--border:#e0d8cc;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Barlow',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+
+header{
+  background:var(--navy);border-bottom:2px solid var(--burg);
+  padding:0 48px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.h-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:#fff;letter-spacing:0.04em;text-transform:uppercase;}
+.h-logo span{color:var(--burg-lt);}
+.h-right{display:flex;align-items:center;gap:12px;}
+.sheet-status{font-size:0.72rem;color:rgba(255,255,255,0.45);letter-spacing:0.06em;}
+.sheet-status.ok{color:#2ecc71;}
+.sheet-status.err{color:#e74c3c;}
+.h-badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;}
+
+/* SETUP BANNER */
+.setup-banner{
+  background:var(--navy2);
+  border:2px solid var(--burg);
+  margin:24px 40px;padding:24px 28px;
+  display:none;
+}
+.setup-banner.show{display:block;}
+.setup-banner h3{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:#fff;text-transform:uppercase;margin-bottom:10px;}
+.setup-banner p{font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:14px;}
+.setup-steps{list-style:none;counter-reset:steps;}
+.setup-steps li{
+  font-size:0.82rem;color:rgba(255,255,255,0.7);
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:flex-start;gap:12px;line-height:1.5;
+}
+.setup-steps li::before{
+  content:counter(steps);counter-increment:steps;
+  background:var(--burg);color:#fff;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:0.8rem;
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.setup-steps a{color:var(--burg-lt);}
+.url-input-row{display:flex;gap:8px;margin-top:16px;}
+.url-input{
+  flex:1;padding:11px 14px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);
+  color:#fff;font-family:'Barlow',sans-serif;font-size:0.85rem;
+}
+.url-input:focus{outline:none;border-color:var(--burg-lt);}
+.url-input::placeholder{color:rgba(255,255,255,0.25);}
+.btn-save-url{
+  background:var(--burg);color:#fff;border:none;
+  padding:11px 24px;
+  font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:800;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+  transition:background .15s;
+}
+.btn-save-url:hover{background:var(--burg-lt);}
+
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 64px);}
+aside{background:var(--navy2);border-right:1px solid rgba(255,255,255,0.06);padding:28px 0;}
+.nav-section{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:0 24px;margin-bottom:8px;margin-top:20px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 24px;cursor:pointer;font-size:0.85rem;font-weight:500;color:rgba(255,255,255,0.5);transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);}
+.nav-item.active{color:#fff;background:rgba(139,46,21,0.2);border-left-color:var(--burg-lt);}
+.nav-item .icon{font-size:1rem;width:18px;text-align:center;}
+.nav-count{margin-left:auto;background:var(--burg);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 7px;min-width:20px;text-align:center;}
+
+main{padding:32px 40px;overflow-y:auto;}
+.page{display:none;}
+.page.active{display:block;}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:var(--white);border:1px solid var(--border);padding:20px 18px;border-top:3px solid var(--ink);transition:border-color .2s;}
+.stat-card:hover{border-top-color:var(--burg);}
+.stat-card .num{font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;color:var(--burg);line-height:1;letter-spacing:-0.02em;}
+.stat-card .lbl{font-size:0.75rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;}
+
+.tbl-wrap{background:var(--white);border:1px solid var(--border);}
+.tbl-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--offwhite);flex-wrap:wrap;gap:10px;}
+.tbl-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--ink);text-transform:uppercase;letter-spacing:0.04em;}
+.tbl-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.search-input{padding:7px 12px;border:1px solid var(--border);background:var(--white);font-family:'Barlow',sans-serif;font-size:0.8rem;color:var(--ink);width:200px;}
+.search-input:focus{outline:none;border-color:var(--burg);}
+.btn-action{background:var(--navy);color:#fff;border:none;padding:8px 14px;font-family:'Barlow Condensed',sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:background .15s;}
+.btn-action:hover{background:var(--burg);}
+.btn-refresh{background:var(--burg);}
+.btn-refresh:hover{background:var(--burg-lt);}
+
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--offwhite);}
+th{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:hover{background:var(--offwhite);}
+td{padding:10px 16px;font-size:0.82rem;color:var(--ink);vertical-align:middle;}
+.td-sm{font-size:0.75rem;color:var(--gray-lt);}
+
+.badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;}
+.badge-join{background:rgba(139,46,21,0.1);color:var(--burg);}
+.badge-msg{background:rgba(15,27,45,0.12);color:var(--navy);}
+.badge-sm{background:#eef4fb;color:#2471a3;}
+.badge-yp{background:#fef9e7;color:#d68910;}
+.badge-club{background:#eafaf1;color:#1e8449;}
+.badge-amb{background:#fef5e7;color:#a04000;}
+
+.empty-state{padding:48px;text-align:center;color:var(--gray-lt);font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}
+.empty-state .ico{font-size:2.5rem;margin-bottom:12px;}
+
+.del-btn{background:none;border:none;cursor:pointer;color:var(--gray-lt);font-size:0.9rem;transition:color .15s;padding:4px;}
+.del-btn:hover{color:#c0392b;}
+
+/* LOADING */
+.loading-overlay{
+  position:fixed;inset:0;background:rgba(15,27,45,0.6);
+  display:none;align-items:center;justify-content:center;
+  z-index:999;backdrop-filter:blur(4px);
+}
+.loading-overlay.show{display:flex;}
+.spinner{
+  width:40px;height:40px;border-radius:50%;
+  border:3px solid rgba(255,255,255,0.15);
+  border-top-color:var(--burg-lt);
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* DETAIL PANEL */
+.detail-panel{position:fixed;right:0;top:64px;bottom:0;width:360px;background:var(--white);border-left:2px solid var(--border);transform:translateX(100%);transition:transform .25s ease;z-index:100;overflow-y:auto;box-shadow:-4px 0 20px rgba(0,0,0,0.08);}
+.detail-panel.open{transform:translateX(0);}
+.dp-head{padding:20px 22px;border-bottom:1px solid var(--border);background:var(--offwhite);display:flex;justify-content:space-between;align-items:flex-start;}
+.dp-name{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--ink);text-transform:uppercase;}
+.dp-close{background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--gray);transition:color .15s;}
+.dp-close:hover{color:var(--ink);}
+.dp-body{padding:20px 22px;}
+.dp-field{margin-bottom:16px;}
+.dp-label{font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gray-lt);margin-bottom:4px;}
+.dp-value{font-size:0.88rem;color:var(--ink);line-height:1.5;}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:0;margin-bottom:16px;border:1px solid var(--border);background:var(--white);width:fit-content;}
+.ftab{background:transparent;border:none;border-right:1px solid var(--border);padding:8px 16px;font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray);cursor:pointer;transition:all .15s;}
+.ftab:last-child{border-right:none;}
+.ftab.on{background:var(--burg);color:#fff;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;font-size:0.82rem;font-weight:500;transform:translateY(80px);opacity:0;transition:all .3s ease;z-index:999;border-left:3px solid var(--burg-lt);}
+.toast.show{transform:translateY(0);opacity:1;}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr;}aside{display:none;}.stats-row{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-logo"><span>AIS</span> Admin — Member Database</div>
+  <div class="h-right">
+    <div class="sheet-status" id="sheetStatus">● Not connected</div>
+    <div class="h-badge">Internal Use Only</div>
+  </div>
+</header>
+
+<!-- SETUP BANNER -->
+<div class="setup-banner" id="setupBanner">
+  <h3>⚙️ Connect Your Google Sheet</h3>
+  <p>This dashboard reads and writes directly to Google Sheets via Google Apps Script. Complete these steps once — takes about 5 minutes.</p>
+  <ol class="setup-steps">
+    <li>Go to <a href="https://script.google.com" target="_blank">script.google.com</a> and click <strong>New project</strong></li>
+    <li>Open the <strong>AIS_GoogleAppsScript.gs</strong> file and paste its entire contents, replacing any existing code</li>
+    <li>Click <strong>Deploy → New deployment</strong>. Set Type: <em>Web app</em>, Execute as: <em>Me</em>, Access: <em>Anyone</em></li>
+    <li>Click <strong>Deploy</strong>, authorize the permissions, then copy the <strong>Web App URL</strong></li>
+    <li>Paste the URL below and click Save:</li>
+  </ol>
+  <div class="url-input-row">
+    <input class="url-input" id="urlInput" type="url" placeholder="https://script.google.com/macros/s/YOUR_ID/exec"/>
+    <button class="btn-save-url" onclick="saveEndpoint()">Save & Connect</button>
+  </div>
+</div>
+
+<div class="layout">
+  <aside>
+    <div class="nav-section">Dashboard</div>
+    <div class="nav-item active" onclick="showPage('members',this)">
+      <span class="icon">👥</span> Members
+      <span class="nav-count" id="memberCount">—</span>
+    </div>
+    <div class="nav-item" onclick="showPage('messages',this)">
+      <span class="icon">✉️</span> Messages
+      <span class="nav-count" id="messageCount">—</span>
+    </div>
+    <div class="nav-section">Filter by Type</div>
+    <div class="nav-item" onclick="quickFilter('Student Member')"><span class="icon">🎓</span> Students</div>
+    <div class="nav-item" onclick="quickFilter('Young Professional')"><span class="icon">💼</span> Professionals</div>
+    <div class="nav-item" onclick="quickFilter('Ambassador / Diplomat')"><span class="icon">🏛️</span> Diplomats</div>
+    <div class="nav-item" onclick="quickFilter('Campus Affiliate (Club)')"><span class="icon">🏫</span> Campus Clubs</div>
+    <div class="nav-section">Tools</div>
+    <div class="nav-item" onclick="loadData()"><span class="icon">🔄</span> Refresh Data</div>
+    <div class="nav-item" onclick="exportCSV('members')"><span class="icon">⬇️</span> Export Members</div>
+    <div class="nav-item" onclick="exportCSV('messages')"><span class="icon">⬇️</span> Export Messages</div>
+    <div class="nav-item" onclick="showSetup()"><span class="icon">⚙️</span> Settings</div>
+  </aside>
+
+  <main>
+    <!-- MEMBERS PAGE -->
+    <div class="page active" id="page-members">
+      <div class="stats-row">
+        <div class="stat-card"><div class="num" id="stat-total">—</div><div class="lbl">Total Members</div></div>
+        <div class="stat-card"><div class="num" id="stat-students">—</div><div class="lbl">Students</div></div>
+        <div class="stat-card"><div class="num" id="stat-chapters">—</div><div class="lbl">Chapters</div></div>
+        <div class="stat-card"><div class="num" id="stat-today">—</div><div class="lbl">Today</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+        <div class="filter-tabs">
+          <button class="ftab on" onclick="setTypeFilter('all',this)">All</button>
+          <button class="ftab" onclick="setTypeFilter('Student Member',this)">Students</button>
+          <button class="ftab" onclick="setTypeFilter('Young Professional',this)">Professionals</button>
+          <button class="ftab" onclick="setTypeFilter('Campus Affiliate (Club)',this)">Clubs</button>
+          <button class="ftab" onclick="setTypeFilter('Ambassador / Diplomat',this)">Diplomats</button>
+        </div>
+        <select id="chapterSel" style="padding:8px 10px;border:1px solid var(--border);font-family:'Barlow',sans-serif;font-size:0.8rem;background:var(--white);" onchange="renderMembers()">
+          <option value="">All Chapters</option>
+        </select>
+        <input class="search-input" id="memberSearch" placeholder="Search name, email, uni..." oninput="renderMembers()"/>
+        <button class="btn-action btn-refresh" onclick="loadData()">⟳ Refresh</button>
+      </div>
+
+      <div class="tbl-wrap">
+        <div class="tbl-head">
+          <div class="tbl-title" id="memberTableTitle">Member Applications</div>
+          <div class="tbl-actions">
+            <button class="btn-action" onclick="exportCSV('members')">⬇ Export CSV</button>
+          </div>
+        </div>
+        <div id="membersTable">
+          <div class="empty-state"><div class="ico">🔗</div>Connect your Google Sheet to see members</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES PAGE -->
+    <div class="page" id="page-messages">
+      <div class="stats-row">
+        <div class="stat-card"><div class="num" id="stat-msgs">—</div><div class="lbl">Total Messages</div></div>
+        <div class="stat-card"><div class="num" id="stat-diplomatic">—</div><div class="lbl">Diplomatic</div></div>
+        <div class="stat-card"><div class="num" id="stat-media">—</div><div class="lbl">Media</div></div>
+        <div class="stat-card"><div class="num" id="stat-partner">—</div><div class="lbl">Partnerships</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <input class="search-input" style="width:260px;" id="msgSearch" placeholder="Search name, org, subject..." oninput="renderMessages()"/>
+        <button class="btn-action btn-refresh" onclick="loadData()">⟳ Refresh</button>
+      </div>
+
+      <div class="tbl-wrap">
+        <div class="tbl-head">
+          <div class="tbl-title">Inbound Messages</div>
+          <div class="tbl-actions">
+            <button class="btn-action" onclick="exportCSV('messages')">⬇ Export CSV</button>
+          </div>
+        </div>
+        <div id="messagesTable">
+          <div class="empty-state"><div class="ico">📬</div>Connect your Google Sheet to see messages</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detailPanel">
+  <div class="dp-head">
+    <div><div class="dp-name" id="dpName">—</div><div style="font-size:0.75rem;color:var(--gray);margin-top:3px;" id="dpSub">—</div></div>
+    <button class="dp-close" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="dp-body" id="dpBody"></div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const ENDPOINT_KEY = 'ais_sheet_endpoint';
+let allMembers  = [];
+let allMessages = [];
+let typeFilter  = 'all';
+
+// ── ENDPOINT MANAGEMENT ──────────────────────────────────────
+function getEndpoint() { return localStorage.getItem(ENDPOINT_KEY) || ''; }
+function saveEndpoint() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url || !url.includes('script.google.com')) {
+    showToast('Please enter a valid Google Apps Script URL');
+    return;
+  }
+  localStorage.setItem(ENDPOINT_KEY, url);
+  document.getElementById('setupBanner').classList.remove('show');
+  loadData();
+}
+function showSetup() {
+  const banner = document.getElementById('setupBanner');
+  banner.classList.toggle('show');
+  const ep = getEndpoint();
+  if (ep) document.getElementById('urlInput').value = ep;
+}
+
+// ── LOAD DATA FROM SHEETS ────────────────────────────────────
+async function loadData() {
+  const endpoint = getEndpoint();
+  if (!endpoint) {
+    document.getElementById('setupBanner').classList.add('show');
+    updateStatus(false, 'Not connected');
+    return;
+  }
+
+  showLoading(true);
+  try {
+    const res = await fetch(`${endpoint}?action=read`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    allMembers  = data.members  || [];
+    allMessages = data.messages || [];
+    updateStatus(true, `Connected · ${allMembers.length + allMessages.length} records`);
+    renderAll();
+    showToast(`Loaded ${allMembers.length} members, ${allMessages.length} messages`);
+  } catch (err) {
+    updateStatus(false, 'Connection error');
+    showToast('Failed to load data: ' + err.message);
+    console.error(err);
+  } finally {
+    showLoading(false);
+  }
+}
+
+function updateStatus(ok, msg) {
+  const el = document.getElementById('sheetStatus');
+  el.textContent = '● ' + msg;
+  el.className = 'sheet-status ' + (ok ? 'ok' : 'err');
+}
+
+// ── RENDER MEMBERS ───────────────────────────────────────────
+function renderMembers() {
+  const search  = (document.getElementById('memberSearch')?.value || '').toLowerCase();
+  const chapter = document.getElementById('chapterSel')?.value || '';
+
+  // Populate chapter dropdown
+  const sel = document.getElementById('chapterSel');
+  if (sel) {
+    const chapters = [...new Set(allMembers.map(m => m['Chapter'] || m.chapter).filter(Boolean))].sort();
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">All Chapters</option>' +
+      chapters.map(c => `<option value="${c}" ${c===cur?'selected':''}>${c}</option>`).join('');
+    if (cur) sel.value = cur;
+  }
+
+  let filtered = allMembers;
+  if (typeFilter !== 'all') filtered = filtered.filter(m => (m['Membership Type']||m.membership) === typeFilter);
+  if (chapter) filtered = filtered.filter(m => (m['Chapter']||m.chapter) === chapter);
+  if (search) filtered = filtered.filter(m =>
+    Object.values(m).join(' ').toLowerCase().includes(search)
+  );
+
+  // Stats
+  const today = new Date().toLocaleDateString('en-GB');
+  document.getElementById('stat-total').textContent = allMembers.length;
+  document.getElementById('stat-students').textContent = allMembers.filter(m=>(m['Membership Type']||m.membership)==='Student Member').length;
+  document.getElementById('stat-chapters').textContent = new Set(allMembers.map(m=>m['Chapter']||m.chapter)).size;
+  document.getElementById('stat-today').textContent = allMembers.filter(m=>{
+    const d = m['Timestamp']||m.date;
+    return d && new Date(d).toLocaleDateString('en-GB') === today;
+  }).length;
+  document.getElementById('memberCount').textContent = allMembers.length;
+  document.getElementById('memberTableTitle').textContent = `Member Applications (${filtered.length})`;
+
+  const container = document.getElementById('membersTable');
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="ico">${allMembers.length ? '🔍' : '📭'}</div>${allMembers.length ? 'No results match your filters.' : 'No members yet.'}</div>`;
+    return;
+  }
+
+  container.innerHTML = `<table>
+    <thead><tr>
+      <th>#</th><th>Name</th><th>Chapter</th><th>University</th>
+      <th>Field</th><th>Membership</th><th>Date</th><th></th>
+    </tr></thead>
+    <tbody>
+    ${filtered.map((m,i) => {
+      const fn = m['First Name']||m.firstName||'';
+      const ln = m['Last Name']||m.lastName||'';
+      const em = m['Email']||m.email||'';
+      const ch = m['Chapter']||m.chapter||'';
+      const un = m['University / Institution']||m.university||'—';
+      const fi = m['Field of Study']||m.field||'—';
+      const mt = m['Membership Type']||m.membership||'';
+      const dt = m['Timestamp']||m.date||'';
+      const id = m['Submission ID']||m.id||'';
+      return `<tr onclick="showMemberDetail(${JSON.stringify(m).replace(/"/g,'&quot;')})" style="cursor:pointer">
+        <td class="td-sm">${i+1}</td>
+        <td><strong>${fn} ${ln}</strong><br><span class="td-sm">${em}</span></td>
+        <td><span class="badge badge-join">${ch}</span></td>
+        <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${un}">${un}</td>
+        <td class="td-sm">${fi}</td>
+        <td><span class="badge ${typeBadge(mt)}">${mt}</span></td>
+        <td class="td-sm">${fmtDate(dt)}</td>
+        <td onclick="event.stopPropagation()">
+          <button class="del-btn" onclick="deleteRecord('members','${id}')">🗑</button>
+        </td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+// ── RENDER MESSAGES ──────────────────────────────────────────
+function renderMessages() {
+  const search = (document.getElementById('msgSearch')?.value || '').toLowerCase();
+  let filtered = allMessages;
+  if (search) filtered = filtered.filter(m => Object.values(m).join(' ').toLowerCase().includes(search));
+
+  document.getElementById('stat-msgs').textContent = allMessages.length;
+  document.getElementById('stat-diplomatic').textContent = allMessages.filter(m=>(m['Subject']||m.subject)==='Diplomatic / Embassy Inquiry').length;
+  document.getElementById('stat-media').textContent = allMessages.filter(m=>(m['Subject']||m.subject)==='Media & Press').length;
+  document.getElementById('stat-partner').textContent = allMessages.filter(m=>(m['Subject']||m.subject)==='Partnership / Collaboration').length;
+  document.getElementById('messageCount').textContent = allMessages.length;
+
+  const container = document.getElementById('messagesTable');
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="ico">${allMessages.length ? '🔍' : '📬'}</div>${allMessages.length ? 'No results.' : 'No messages yet.'}</div>`;
+    return;
+  }
+
+  container.innerHTML = `<table>
+    <thead><tr>
+      <th>#</th><th>From</th><th>Chapter</th><th>Subject</th><th>Preview</th><th>Date</th><th></th>
+    </tr></thead>
+    <tbody>
+    ${filtered.map((m,i) => {
+      const nm = m['Name']||m.name||'';
+      const org= m['Organisation']||m.org||'';
+      const em = m['Email']||m.email||'';
+      const ch = m['Chapter']||m.chapter||'';
+      const su = m['Subject']||m.subject||'';
+      const ms = m['Message']||m.message||'';
+      const dt = m['Timestamp']||m.date||'';
+      const id = m['Submission ID']||m.id||'';
+      return `<tr onclick="showMsgDetail(${JSON.stringify(m).replace(/"/g,'&quot;')})" style="cursor:pointer">
+        <td class="td-sm">${i+1}</td>
+        <td><strong>${nm}</strong><br><span class="td-sm">${org||em}</span></td>
+        <td><span class="badge badge-msg">${ch}</span></td>
+        <td style="font-size:0.78rem;">${su}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.76rem;color:var(--gray);">${ms}</td>
+        <td class="td-sm">${fmtDate(dt)}</td>
+        <td onclick="event.stopPropagation()">
+          <button class="del-btn" onclick="deleteRecord('messages','${id}')">🗑</button>
+        </td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+// ── DELETE ───────────────────────────────────────────────────
+async function deleteRecord(sheet, id) {
+  if (!confirm('Delete this record?')) return;
+  const endpoint = getEndpoint();
+  if (!endpoint) { showToast('Not connected'); return; }
+  showLoading(true);
+  try {
+    await fetch(`${endpoint}?action=delete&sheet=${sheet}&id=${encodeURIComponent(id)}`);
+    await loadData();
+    showToast('Record deleted');
+    closeDetail();
+  } catch(e) {
+    showToast('Delete failed: ' + e.message);
+  } finally {
+    showLoading(false);
+  }
+}
+
+// ── DETAIL PANELS ────────────────────────────────────────────
+function showMemberDetail(m) {
+  const fn = m['First Name']||m.firstName||'';
+  const ln = m['Last Name']||m.lastName||'';
+  const id = m['Submission ID']||m.id||'';
+  document.getElementById('dpName').textContent = fn + ' ' + ln;
+  document.getElementById('dpSub').textContent = m['Email']||m.email||'';
+  document.getElementById('dpBody').innerHTML = fields([
+    ['Chapter', m['Chapter']||m.chapter],
+    ['University', m['University / Institution']||m.university],
+    ['Field of Study', m['Field of Study']||m.field],
+    ['Membership Type', m['Membership Type']||m.membership],
+    ['Email', `<a href="mailto:${m['Email']||m.email}" style="color:var(--burg)">${m['Email']||m.email}</a>`],
+    ['Submitted', new Date(m['Timestamp']||m.date).toLocaleString()],
+    ['Record ID', `<span style="font-size:0.7rem;color:var(--gray-lt)">${id}</span>`],
+  ]) + `<button onclick="deleteRecord('members','${id}');closeDetail();" style="margin-top:8px;background:#c0392b;color:#fff;border:none;padding:9px 18px;font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;width:100%;">Delete Record</button>`;
+  document.getElementById('detailPanel').classList.add('open');
+}
+function showMsgDetail(m) {
+  const nm = m['Name']||m.name||'';
+  const id = m['Submission ID']||m.id||'';
+  document.getElementById('dpName').textContent = nm;
+  document.getElementById('dpSub').textContent = m['Organisation']||m.org||'';
+  document.getElementById('dpBody').innerHTML = fields([
+    ['Chapter', m['Chapter']||m.chapter],
+    ['Organisation', m['Organisation']||m.org],
+    ['Email', `<a href="mailto:${m['Email']||m.email}" style="color:var(--burg)">${m['Email']||m.email}</a>`],
+    ['Subject', m['Subject']||m.subject],
+    ['Message', `<div style="background:var(--offwhite);padding:10px;line-height:1.65;font-size:0.82rem;">${m['Message']||m.message||'—'}</div>`],
+    ['Submitted', new Date(m['Timestamp']||m.date).toLocaleString()],
+  ]) + `<button onclick="deleteRecord('messages','${id}');closeDetail();" style="margin-top:8px;background:#c0392b;color:#fff;border:none;padding:9px 18px;font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;width:100%;">Delete Record</button>`;
+  document.getElementById('detailPanel').classList.add('open');
+}
+function fields(arr) {
+  return arr.map(([l,v]) => `<div class="dp-field"><div class="dp-label">${l}</div><div class="dp-value">${v||'—'}</div></div>`).join('');
+}
+function closeDetail() { document.getElementById('detailPanel').classList.remove('open'); }
+
+// ── EXPORT CSV ───────────────────────────────────────────────
+function exportCSV(type) {
+  const data = type === 'members' ? allMembers : allMessages;
+  if (!data.length) { showToast('No data to export'); return; }
+  const headers = Object.keys(data[0]);
+  const rows = data.map(r => headers.map(h => `"${String(r[h]||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.map(h=>`"${h}"`).join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = type==='members'?'AIS_Members.csv':'AIS_Messages.csv';
+  a.click();
+  showToast('Exported ' + a.download);
+}
+
+// ── FILTERS ──────────────────────────────────────────────────
+function setTypeFilter(t, btn) {
+  typeFilter = t;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  renderMembers();
+}
+function quickFilter(type) {
+  typeFilter = type;
+  showPage('members', document.querySelector('.nav-item.active'));
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
+}
+
+// ── NAV ──────────────────────────────────────────────────────
+function showPage(page, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  closeDetail();
+}
+
+// ── UTILS ────────────────────────────────────────────────────
+function typeBadge(t) {
+  const m={'Student Member':'badge-sm','Young Professional':'badge-yp','Campus Affiliate (Club)':'badge-club','Ambassador / Diplomat':'badge-amb'};
+  return m[t]||'badge-sm';
+}
+function fmtDate(d) {
+  if(!d) return '—';
+  try { return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+  catch { return d; }
+}
+function renderAll() { renderMembers(); renderMessages(); }
+function showLoading(v) { document.getElementById('loadingOverlay').classList.toggle('show',v); }
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+// Pre-set the endpoint if not already saved
+if (!localStorage.getItem(ENDPOINT_KEY)) {
+  localStorage.setItem(ENDPOINT_KEY, 'https://script.google.com/macros/s/AKfycbzfy3kXXQxKHobPHquh3dOnamaJNiLUEH8kdq5c1xWXVL84arGk45I56x82mT-RLcSvgQ/exec');
+}
+document.getElementById('urlInput').value = 'https://script.google.com/macros/s/AKfycbzfy3kXXQxKHobPHquh3dOnamaJNiLUEH8kdq5c1xWXVL84arGk45I56x82mT-RLcSvgQ/exec';
+loadData();
+</script>
+</body>
+</html>
