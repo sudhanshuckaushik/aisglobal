@@ -10,6 +10,71 @@ const TODAY = new Date().toISOString().slice(0, 10);
 global.window = {};
 eval(fs.readFileSync(path.join(ROOT, 'data.js'), 'utf8'));
 const CH = window.AIS_CHAPTERS;
+const readJSON = f => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8')); } catch (e) { return null; } };
+const NEWS = readJSON('data/news.json');
+const LINKS = readJSON('data/links.json') || {};
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const fmtDay = d => { const x = new Date(d + 'T00:00:00Z'); return x.getUTCDate() + ' ' + MONTHS[x.getUTCMonth()].slice(0, 3); };
+const fmtLong = iso => { const x = new Date(iso); return x.getUTCDate() + ' ' + MONTHS[x.getUTCMonth()] + ' ' + x.getUTCFullYear(); };
+// the run on the 1st covers the month before it
+const coveredMonth = iso => { const x = new Date(new Date(iso).getTime() - 3 * 864e5); return MONTHS[x.getUTCMonth()] + ' ' + x.getUTCFullYear(); };
+const tagClass = t => 'news__tag news__tag--' + String(t || 'news').toLowerCase();
+function newsList(items, withCountry) {
+  return '<ol class="news">' + items.map(it => `<li class="news__i${it.region ? ' news__i--region' : ''}">` +
+    `<time datetime="${esc(it.date)}">${esc(fmtDay(it.date))}</time>` +
+    `<span class="news__body">` +
+      `<span class="news__meta">${withCountry ? `<a class="news__c" href="/chapters/${esc(it.slug)}/">${esc(it.country)}</a>` : ''}${it.region ? '<span class="news__c news__c--region">Across Europe</span>' : ''}<span class="${tagClass(it.tag)}">${esc(it.tag)}</span></span>` +
+      `<a class="news__h" href="${esc(it.url)}" target="_blank" rel="noopener nofollow">${esc(it.title)}</a>` +
+      `<span class="news__s">${esc(it.source)}</span>` +
+    `</span></li>`).join('') + '</ol>';
+}
+function officialLinks(c) {
+  const L = LINKS[c.country];
+  if (!L || !L.length) return '';
+  const T = { embassy: 'Indian mission', visa: 'Student visa', work: 'After graduation', study: 'Study portal' };
+  return `<section class="cpl"><div class="wrap"><div class="cpl__head"><p class="label">Official links</p><h2 class="h2">Where to check the rules yourself.</h2></div><div class="cpl__grid">` +
+    L.map(l => { let host = ''; try { host = new URL(l.url).hostname.replace(/^www\./, ''); } catch (e) {} return `<a class="cpl__i" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="cpl__t">${esc(T[l.type] || 'Official')}</span><b>${esc(l.label)}</b><span class="cpl__u">${esc(host)} &nearr;</span></a>`; }).join('') +
+    `</div></div></section>`;
+}
+function chapterNews(c) {
+  if (!NEWS) return '';
+  const items = (NEWS.countries || {})[slug(c)] || [];
+  const vol = (NEWS.volume || {})[slug(c)] || 0, vmax = Math.max(1, ...Object.values(NEWS.volume || { a: 1 }));
+  const own = items.filter(i => !i.region).length;
+  const body = items.length ? newsList(items, false) :
+    `<p class="news__empty">No major English-language coverage of Indian students in ${esc(place(c))} this month. We check again on the 1st.</p>`;
+  return `<section class="cpn" id="news"><div class="wrap cpn__grid">
+    <div class="cpn__side">
+      <p class="label">This month</p>
+      <h2 class="h2">Indian students in the news in ${esc(place(c))}.</h2>
+      <p class="cpn__stamp">${esc(coveredMonth(NEWS.updated))}. Updated ${esc(fmtLong(NEWS.updated))}, refreshed automatically on the 1st of every month.</p>
+      <div class="cpn__meter" title="Stories found in the last ${NEWS.windowDays} days"><span>Coverage this month</span><i style="--w:${(vol / vmax).toFixed(3)}"></i><b>${vol} ${vol === 1 ? 'story' : 'stories'}</b></div>
+      ${own < items.length ? '<p class="cpn__note">Coverage was light, so recent stories from across Europe are included and marked.</p>' : ''}
+    </div>
+    <div class="cpn__list">${body}<p class="cpn__note">Headlines link to the original reporting. They are selected automatically; AIS does not endorse third-party coverage.</p></div>
+  </div></section>`;
+}
+function homeBrief() {
+  if (!NEWS || !NEWS.top || !NEWS.top.length) return '';
+  const vol = Object.entries(NEWS.volume || {}).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const vmax = Math.max(1, ...vol.map(v => v[1]));
+  const bySlug = Object.fromEntries(CH.map(c => [slug(c), c]));
+  const bars = vol.map(([k, v]) => `<a class="brief__bar" href="/chapters/${k}/"><span>${esc(bySlug[k] ? bySlug[k].country : k)}</span><i style="--w:${(v / vmax).toFixed(3)}"></i><b>${v}</b></a>`).join('');
+  return `<section class="brief" id="brief">
+  <div class="wrap">
+    <div class="sec-head grid12">
+      <p class="label">03 · The monthly brief</p>
+      <h2 class="h2">What happened to Indian students abroad in <span class="hl hl--under">${esc(coveredMonth(NEWS.updated).split(' ')[0])}</span>.</h2>
+      <p class="sec-head__p">Headlines from every chapter country, gathered automatically on the 1st of each month. Updated ${esc(fmtLong(NEWS.updated))}.</p>
+    </div>
+    <div class="brief__grid">
+      <div class="brief__list">${newsList(NEWS.top, true)}</div>
+      <aside class="brief__side"><h3>Where the news was</h3><p>Stories found per chapter country in the last ${NEWS.windowDays} days.</p>${bars}<a class="arrow" href="/chapters/">Every chapter's news</a></aside>
+    </div>
+  </div>
+</section>`;
+}
+
 
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 const slug = c => c.country.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -53,7 +118,7 @@ function head({ title, desc, url, jsonld }) {
   <div class="wrap nav__in">
     <a class="logo" href="/" aria-label="Association of Indian Students, home">${LOGO}</a>
     <nav class="nav__links" aria-label="Primary">
-      <a href="/#mandate">Our mandate</a><a href="/chapters/">Chapters</a><a href="/#positions">Issues</a><a href="/#press">Press</a>
+      <a href="/#mandate">Our mandate</a><a href="/chapters/">Chapters</a><a href="#news">News</a><a href="/#positions">Issues</a><a href="/#press">Press</a>
     </nav>
     <a class="btn btn--outline nav__cta" href="/#join">Join a chapter</a>
   </div>
@@ -144,6 +209,8 @@ function chapterPage(c) {
     </aside>
   </div>
 </section>
+${chapterNews(c)}
+${officialLinks(c)}
 ${near ? `<section class="cp-near"><div class="wrap"><h2 class="h2">More chapters in ${esc(regionName[c.region])}</h2><div class="cp-near__grid">${near}</div><a class="arrow" href="/chapters/">All 30 chapters</a></div></section>` : ''}
 ` + foot();
 }
@@ -181,7 +248,10 @@ fs.writeFileSync(path.join(ROOT, 'chapters', 'index.html'), hubPage());
 let home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 home = home.replace(/<!--ALL-CHAPTERS-->[\s\S]*?<!--\/ALL-CHAPTERS-->/, `<!--ALL-CHAPTERS-->${chapterLinks()}<!--/ALL-CHAPTERS-->`);
 home = home.replace(/<!--TOP-CHAPTERS-->[\s\S]*?<!--\/TOP-CHAPTERS-->/, `<!--TOP-CHAPTERS-->${bySize.slice(0, 4).map(c => `<a href="/chapters/${slug(c)}/">${esc(c.country)}</a>`).join('')}<!--/TOP-CHAPTERS-->`);
+home = home.replace(/<!--BRIEF-->[\s\S]*?<!--\/BRIEF-->/, `<!--BRIEF-->${homeBrief()}<!--/BRIEF-->`);
 fs.writeFileSync(path.join(ROOT, 'index.html'), home);
+// compact news for the home-page chapter panels
+if (NEWS) fs.writeFileSync(path.join(ROOT, 'data', 'news.js'), '// generated by build.js from data/news.json\nwindow.AIS_NEWS = ' + JSON.stringify({ updated: NEWS.updated, countries: Object.fromEntries(Object.entries(NEWS.countries).map(([k, v]) => [k, v.filter(i => !i.region).slice(0, 3)])) }) + ';\n');
 
 // sitemap + robots
 const urls = [`${SITE}/`, `${SITE}/chapters/`, ...alpha.map(c => `${SITE}/chapters/${slug(c)}/`)];

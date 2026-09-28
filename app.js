@@ -82,9 +82,9 @@
     if (!window.WORLD) return;
     var byIso = {};
     WORLD.countries.forEach(function (c) { byIso[c.iso] = c; });
-    // hand-placed points for multi-part countries whose centroid lands in the wrong place
-    var fix = { USA: [228, 120], FRA: [487, 98], NOR: [497, 58], MYS: [762, 207], SGP: [766, 213], NZL: [963, 305] };
-    var ind = byIso.IND, chSet = {};
+    // chapter points and the India origin come from the map file (projected lon/lat)
+    var PT = WORLD.points || {};
+    var ind = PT.IN ? { cx: PT.IN[0], cy: PT.IN[1] } : byIso.IND, chSet = {};
     CH.forEach(function (c) { chSet[I3[c.iso]] = c.country; });
     svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('role', 'group');
@@ -98,7 +98,7 @@
     var arcHTML = '', dotHTML = '', lblHTML = '', pulseHTML = '';
     bySize.forEach(function (c, i) {
       var i3 = I3[c.iso], w = byIso[i3];
-      var p = fix[i3] || [w.cx, w.cy], x = p[0], y = p[1];
+      var p = PT[c.iso] || [w.cx, w.cy], x = p[0], y = p[1];
       c.x = x; c.y = y;
       c.r = 2.6 + Math.sqrt(c.n / MAX) * 22;
       var mx = (ind.cx + x) / 2, my = Math.min(ind.cy, y) - Math.abs(ind.cx - x) * 0.28;
@@ -208,7 +208,7 @@
     var pts = CH.filter(function (c) { return c.region === region; });
     var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     pts.forEach(function (c) { x0 = Math.min(x0, c.x); y0 = Math.min(y0, c.y); x1 = Math.max(x1, c.x); y1 = Math.max(y1, c.y); });
-    if (region === 'asia') { x0 = Math.min(x0, 700); }            // keep India in frame
+    if (region === 'asia' && WORLD.points && WORLD.points.IN) { x0 = Math.min(x0, WORLD.points.IN[0] - 30); }   // keep India in frame
     var w = x1 - x0, h = y1 - y0, pad = Math.max(w, h) * 0.1 + 14;
     x0 -= pad; y0 -= pad; w += pad * 2; h += pad * 2;
     var ar = full.w / full.h;
@@ -320,11 +320,16 @@
       ? '<p class="dos__fig">' + esc(c.students.display) + ' Indian students' + (c.students.periodFull || c.students.period ? ', ' + esc(c.students.periodFull || c.students.period) : '') + '. Source: ' + (c.students.url ? '<a href="' + esc(c.students.url) + '" target="_blank" rel="noopener">' + esc(c.students.source) + '</a>' : esc(c.students.source)) + '.</p>'
       : '';
     var page = '/chapters/' + c.country.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '/';
+    var nw = (window.AIS_NEWS && window.AIS_NEWS.countries[page.split('/')[2]]) || [];
+    var newsHTML = nw.length ? '<h4>In the news this month</h4><ul class="dos__news">' + nw.map(function (n) {
+      return '<li><a href="' + esc(n.url) + '" target="_blank" rel="noopener nofollow">' + esc(n.title) + '</a><span>' + esc(n.source) + '</span></li>';
+    }).join('') + '</ul>' : '';
     act += '<a class="arrow dos__page" href="' + page + '">Full chapter page</a>';
     return '<div class="dos">' +
       '<div class="dos__main">' +
         '<p class="dos__lead">' + esc(c.desc) + '</p>' +
         (c.community ? '<h4>The community</h4><p>' + esc(c.community) + '</p>' : '') +
+        newsHTML +
         (c.fact && c.fact.text ? '<p class="dos__fact">' + esc(c.fact.text) + (c.fact.url ? ' <a href="' + esc(c.fact.url) + '" target="_blank" rel="noopener">Source</a>' : '') + '</p>' : '') +
       '</div>' +
       '<div class="dos__side">' +

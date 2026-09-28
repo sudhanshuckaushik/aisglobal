@@ -1,0 +1,582 @@
+{
+  "United States": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Washington DC (student registration)",
+      "url": "https://www.indianembassyusa.gov.in/Indian_Students_Registration"
+    },
+    {
+      "type": "visa",
+      "label": "Student visa (US Department of State)",
+      "url": "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+    },
+    {
+      "type": "work",
+      "label": "Optional Practical Training (USCIS)",
+      "url": "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students"
+    },
+    {
+      "type": "study",
+      "label": "EducationUSA",
+      "url": "https://educationusa.state.gov/"
+    }
+  ],
+  "Mexico": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Mexico City",
+      "url": "https://www.indiainmexico.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Temporary resident student visa (SRE)",
+      "url": "https://www.gob.mx/sre/acciones-y-programas/visa-de-residente-temporal-estudiante"
+    }
+  ],
+  "Australia": [
+    {
+      "type": "embassy",
+      "label": "High Commission of India, Canberra (links for Indian students)",
+      "url": "https://www.hcicanberra.gov.in/page/resources-useful-links-for-indian-students/"
+    },
+    {
+      "type": "visa",
+      "label": "Student visa subclass 500 (Home Affairs)",
+      "url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500"
+    },
+    {
+      "type": "work",
+      "label": "Temporary Graduate visa subclass 485",
+      "url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485"
+    },
+    {
+      "type": "study",
+      "label": "Study Australia",
+      "url": "https://www.studyaustralia.gov.au/"
+    }
+  ],
+  "New Zealand": [
+    {
+      "type": "embassy",
+      "label": "High Commission of India, Wellington (education in NZ)",
+      "url": "https://www.hciwellington.gov.in/page/education-in-new-zealand/"
+    },
+    {
+      "type": "visa",
+      "label": "Fee Paying Student Visa (Immigration NZ)",
+      "url": "https://www.immigration.govt.nz/visas/fee-paying-student-visa/"
+    },
+    {
+      "type": "work",
+      "label": "Post Study Work Visa",
+      "url": "https://www.immigration.govt.nz/visas/post-study-work-visa/"
+    },
+    {
+      "type": "study",
+      "label": "Study with New Zealand",
+      "url": "https://www.studywithnewzealand.govt.nz/"
+    }
+  ],
+  "Japan": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Tokyo",
+      "url": "https://www.indembassy-tokyo.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Student visa (Ministry of Foreign Affairs)",
+      "url": "https://www.mofa.go.jp/j_info/visit/visa/long/visa6.html"
+    },
+    {
+      "type": "study",
+      "label": "Study in Japan (JASSO)",
+      "url": "https://www.studyinjapan.go.jp/en/"
+    }
+  ],
+  "South Korea": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Seoul",
+      "url": "https://www.indembassyseoul.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Student visa and stay status (Study in Korea)",
+      "url": "https://www.studyinkorea.go.kr/ko/plan/visaAndStay.do"
+    },
+    {
+      "type": "study",
+      "label": "Study in Korea",
+      "url": "https://www.studyinkorea.go.kr/"
+    }
+  ],
+  "Singapore": [
+    {
+      "type": "embassy",
+      "label": "High Commission of India, Singapore",
+      "url": "https://www.hcisingapore.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Student's Pass (ICA)",
+      "url": "https://www.ica.gov.sg/reside/STP"
+    }
+  ],
+  "Malaysia": [
+    {
+      "type": "embassy",
+      "label": "High Commission of India, Kuala Lumpur (FAQs for Indian students)",
+      "url": "https://hcikl.gov.in/home/Education/Education-in-Malaysia/FAQs-for-Indian-students-to-study-in-Malaysia"
+    },
+    {
+      "type": "visa",
+      "label": "Student pass (Education Malaysia Global Services)",
+      "url": "https://educationmalaysia.gov.my/"
+    },
+    {
+      "type": "study",
+      "label": "Education Malaysia (EMGS)",
+      "url": "https://educationmalaysia.gov.my/"
+    }
+  ],
+  "UAE": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Abu Dhabi",
+      "url": "https://www.indembassyuae.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence visa for studying (UAE Government)",
+      "url": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/residence-visa-for-studying-in-the-uae"
+    }
+  ],
+  "Germany": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Berlin",
+      "url": "https://indianembassyberlin.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Student visa (Make it in Germany)",
+      "url": "https://www.make-it-in-germany.com/en/study-vocational-training/studies-in-germany/visa"
+    },
+    {
+      "type": "work",
+      "label": "Job-seeker permit after graduation",
+      "url": "https://www.make-it-in-germany.com/en/study-training/study/prospects/seeking-employment"
+    },
+    {
+      "type": "study",
+      "label": "Study in Germany (DAAD)",
+      "url": "https://www.study-in-germany.de/en/"
+    }
+  ],
+  "France": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Paris (registration)",
+      "url": "https://www.eoiparis.gov.in/register.php"
+    },
+    {
+      "type": "visa",
+      "label": "Student visa (France-Visas)",
+      "url": "https://france-visas.gouv.fr/en/etudiant"
+    },
+    {
+      "type": "work",
+      "label": "Job search residence permit after graduation (Service Public)",
+      "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F17319?lang=en"
+    },
+    {
+      "type": "study",
+      "label": "Campus France",
+      "url": "https://www.campusfrance.org/en"
+    }
+  ],
+  "Ireland": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Dublin (student information)",
+      "url": "https://www.indianembassydublin.gov.in/page/student/"
+    },
+    {
+      "type": "visa",
+      "label": "Studying in Ireland (Immigration Service)",
+      "url": "https://www.irishimmigration.ie/coming-to-study-in-ireland/"
+    },
+    {
+      "type": "work",
+      "label": "Third Level Graduate Programme (Stamp 1G)",
+      "url": "https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/"
+    },
+    {
+      "type": "study",
+      "label": "Education in Ireland",
+      "url": "https://www.educationinireland.com/en/"
+    }
+  ],
+  "Italy": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Rome",
+      "url": "https://www.indianembassyrome.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Visa for Italy (Ministry of Foreign Affairs)",
+      "url": "https://vistoperitalia.esteri.it/"
+    },
+    {
+      "type": "study",
+      "label": "Study in Italy (Ministry of Foreign Affairs)",
+      "url": "https://studyinitaly.esteri.it/"
+    }
+  ],
+  "Spain": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Madrid",
+      "url": "https://www.eoimadrid.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Study visa (Embassy of Spain, New Delhi)",
+      "url": "https://www.exteriores.gob.es/Embajadas/nuevadelhi/en/ServiciosConsulares/Paginas/Consular/Visado-de-estudios.aspx"
+    }
+  ],
+  "Portugal": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Lisbon",
+      "url": "https://eoilisbon.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "National visa types, including study (Vistos MNE)",
+      "url": "https://vistos.mne.gov.pt/en/national-visas/general-information/type-of-visa"
+    },
+    {
+      "type": "study",
+      "label": "Study and Research in Portugal",
+      "url": "https://study-research.pt/"
+    }
+  ],
+  "Netherlands": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, The Hague (advisory for Indian students)",
+      "url": "https://www.indianembassynetherlands.gov.in/page/advisory-for-indian-students-seeking-admission-studying-in-the-netherlands/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for study (IND)",
+      "url": "https://ind.nl/en/residence-permits/study"
+    },
+    {
+      "type": "work",
+      "label": "Orientation year after graduation (IND)",
+      "url": "https://ind.nl/en/residence-permits/work/residence-permit-for-orientation-year"
+    },
+    {
+      "type": "study",
+      "label": "Study in NL (Nuffic)",
+      "url": "https://www.studyinnl.org/"
+    }
+  ],
+  "Belgium": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Brussels",
+      "url": "https://www.indianembassybrussels.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence for study (Immigration Office)",
+      "url": "https://dofi.ibz.be/en/themes/third-country-nationals/study"
+    },
+    {
+      "type": "work",
+      "label": "Search year after higher studies",
+      "url": "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies"
+    },
+    {
+      "type": "study",
+      "label": "Study in Flanders",
+      "url": "https://www.studyinflanders.be/"
+    },
+    {
+      "type": "study",
+      "label": "Study in Belgium (Wallonia-Brussels)",
+      "url": "https://www.studyinbelgium.be/en"
+    }
+  ],
+  "Switzerland": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Bern",
+      "url": "https://www.indembassybern.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permits for non-EU nationals (SEM)",
+      "url": "https://www.sem.admin.ch/sem/en/home/themen/aufenthalt/nicht_eu_efta.html"
+    },
+    {
+      "type": "study",
+      "label": "Study in Switzerland (swissuniversities)",
+      "url": "https://www.studyinswitzerland.plus/visas-permits/"
+    }
+  ],
+  "Austria": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Vienna",
+      "url": "https://www.eoivienna.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for students (Migration.gv.at)",
+      "url": "https://www.migration.gv.at/en/types-of-immigration/temporary-residence/students/"
+    },
+    {
+      "type": "work",
+      "label": "Staying on after graduation",
+      "url": "https://www.migration.gv.at/en/types-of-immigration/permanent-immigration/graduates/"
+    },
+    {
+      "type": "study",
+      "label": "Study in Austria (OeAD)",
+      "url": "https://studyinaustria.at/en"
+    }
+  ],
+  "Czech Republic": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Prague",
+      "url": "https://www.eoiprague.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Long-term residence permit for studies (Ministry of the Interior)",
+      "url": "https://ipc.gov.cz/en/visa-and-residence-permit-types/third-country-nationals/long-term-residence-permits/long-term-residence-permit-in-the-czech-republic-for-the-purpose-of-studies/"
+    },
+    {
+      "type": "work",
+      "label": "Residence permit to seek employment after studies",
+      "url": "https://ipc.gov.cz/en/visa-and-residence-permit-types/third-country-nationals/long-term-residence-permits/long-term-residence-permit-for-the-purpose-of-seeking-employment-or-starting-a-business/"
+    },
+    {
+      "type": "study",
+      "label": "Study in the Czech Republic",
+      "url": "https://studyin.gov.cz/"
+    }
+  ],
+  "Hungary": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Budapest",
+      "url": "https://www.eoibudapest.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for study (Immigration Directorate)",
+      "url": "https://oif.gov.hu/factsheets/residence-of-the-student-pupil"
+    },
+    {
+      "type": "work",
+      "label": "Residence permit to seek a job after studies",
+      "url": "https://oif.gov.hu/factsheets/residence-permit-for-the-purpose-of-seeking-a-job-or-starting-a-business"
+    },
+    {
+      "type": "study",
+      "label": "Study in Hungary",
+      "url": "https://studyinhungary.hu/"
+    }
+  ],
+  "Poland": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Warsaw (student registration)",
+      "url": "https://www.indianembassywarsaw.gov.in/student_register/"
+    },
+    {
+      "type": "visa",
+      "label": "Visa and application (Study in Poland, NAWA)",
+      "url": "https://study.gov.pl/visa-application"
+    },
+    {
+      "type": "work",
+      "label": "Temporary residence permit for graduates (Office for Foreigners)",
+      "url": "https://www.gov.pl/web/udsc-en/permit-for-temporary-residence--graduate"
+    },
+    {
+      "type": "study",
+      "label": "NAWA, for foreign students",
+      "url": "https://nawa.gov.pl/en/students/foreign-students"
+    }
+  ],
+  "Cyprus": [
+    {
+      "type": "embassy",
+      "label": "High Commission of India, Nicosia",
+      "url": "https://www.hcinicosia.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Student residence permit (Migration Department)",
+      "url": "https://www.gov.cy/mip-md/en/documents/students/"
+    },
+    {
+      "type": "study",
+      "label": "Higher Education in Cyprus (Ministry of Education)",
+      "url": "https://www.highereducation.ac.cy/index.php/en/"
+    }
+  ],
+  "Latvia": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Riga",
+      "url": "https://www.eoiriga.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for higher education (PMLP)",
+      "url": "https://www.pmlp.gov.lv/en/studies-accredited-higher-educational-establishment"
+    },
+    {
+      "type": "study",
+      "label": "Study in Latvia",
+      "url": "https://www.studyinlatvia.lv/"
+    }
+  ],
+  "Lithuania": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Vilnius",
+      "url": "https://www.eoivilnius.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for students (Migration Department)",
+      "url": "https://www.migracija.lt/en/esu-studentas1"
+    },
+    {
+      "type": "study",
+      "label": "Study in Lithuania",
+      "url": "https://studyin.lt/"
+    }
+  ],
+  "Estonia": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Tallinn",
+      "url": "https://www.indembassytallinn.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for study (Police and Border Guard Board)",
+      "url": "https://www.politsei.ee/en/instructions/residence-permit-for-study"
+    },
+    {
+      "type": "work",
+      "label": "Working during and after studies (Study in Estonia)",
+      "url": "https://www.studyinestonia.ee/working"
+    },
+    {
+      "type": "study",
+      "label": "Study in Estonia",
+      "url": "https://www.studyinestonia.ee/"
+    }
+  ],
+  "Finland": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Helsinki",
+      "url": "https://www.indembhelsinki.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for studies (Migri)",
+      "url": "https://migri.fi/en/studying-in-finland"
+    },
+    {
+      "type": "work",
+      "label": "Residence permit to look for work after graduation (Migri)",
+      "url": "https://migri.fi/en/after-graduation"
+    },
+    {
+      "type": "study",
+      "label": "Study in Finland",
+      "url": "https://www.studyinfinland.fi/"
+    }
+  ],
+  "Sweden": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Stockholm",
+      "url": "https://www.indembassysweden.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for higher education (Migrationsverket)",
+      "url": "https://www.migrationsverket.se/en/you-want-to-apply/study/higher-education.html"
+    },
+    {
+      "type": "work",
+      "label": "Permit to seek work after studies (Migrationsverket)",
+      "url": "https://www.migrationsverket.se/en/you-want-to-extend/study/look-for-work-after-completing-your-studies-in-sweden.html"
+    },
+    {
+      "type": "study",
+      "label": "Study in Sweden (Swedish Institute)",
+      "url": "https://studyinsweden.se/"
+    }
+  ],
+  "Norway": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Oslo",
+      "url": "https://www.indianembassyoslo.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Study permit (UDI)",
+      "url": "https://www.udi.no/en/want-to-apply/studies/studietillatelse/"
+    },
+    {
+      "type": "work",
+      "label": "Job seeker permit after studies (UDI)",
+      "url": "https://www.udi.no/en/want-to-apply/work-immigration/job-seekers/"
+    },
+    {
+      "type": "study",
+      "label": "Study in Norway (HK-dir)",
+      "url": "https://studyinnorway.no/"
+    }
+  ],
+  "Denmark": [
+    {
+      "type": "embassy",
+      "label": "Embassy of India, Copenhagen",
+      "url": "https://www.indianembassycopenhagen.gov.in/"
+    },
+    {
+      "type": "visa",
+      "label": "Residence permit for higher education (New to Denmark)",
+      "url": "https://www.nyidanmark.dk/en-GB/You-want-to-apply/Study/Higher-Education"
+    },
+    {
+      "type": "work",
+      "label": "Job-seeking permit after graduation (New to Denmark)",
+      "url": "https://www.nyidanmark.dk/en-GB/You-want-to-apply/Study/Study---job-seeking/Study---3-years-job-seeking"
+    },
+    {
+      "type": "study",
+      "label": "Study in Denmark",
+      "url": "https://studyindenmark.dk/"
+    }
+  ]
+}

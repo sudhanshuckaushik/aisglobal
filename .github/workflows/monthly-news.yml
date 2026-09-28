@@ -1,0 +1,38 @@
+name: Monthly chapter news
+
+on:
+  schedule:
+    - cron: "0 5 1 * *"   # 05:00 UTC on the 1st of every month (10:30 IST)
+  workflow_dispatch: {}    # also runnable by hand from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monthly-news
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Fetch news for every chapter
+        run: node scripts/fetch-news.js
+      - name: Rebuild chapter pages
+        run: node build.js
+      - name: Commit and push if anything changed
+        run: |
+          git config user.name "AIS news bot"
+          git config user.email "hello@globalindianstudents.org"
+          git add -A data chapters index.html sitemap.xml
+          if git diff --cached --quiet; then
+            echo "No changes this month."
+          else
+            git commit -m "Monthly chapter news: $(date -u +'%B %Y')"
+            git push
+          fi

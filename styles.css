@@ -522,3 +522,67 @@ section[id]{scroll-margin-top:76px}
 .race__i a{font-size:13px;color:var(--ink-3)}
 @media (max-width:860px){.race__i + .race__i{padding-left:0;border-left:0}}
 .foot__cols p a{display:inline;padding:0;text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- news: shared list ---------- */
+.news{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.news__i{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:18px 0 20px;border-bottom:1px solid var(--rule)}
+.news__i time{font:700 14px/1.4 var(--f);color:var(--ink-3);font-variant-numeric:tabular-nums;padding-top:2px}
+.news__body{display:grid;gap:6px}
+.news__meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.news__c{font:700 12.5px/1 var(--f);color:var(--red);text-decoration:none}
+.news__c:hover{text-decoration:underline}
+.news__c--region{color:var(--ink-2)}
+.news__tag{font:600 11.5px/1 var(--f);padding:4px 7px;box-shadow:inset 0 0 0 1px var(--rule);color:var(--ink-2)}
+.news__tag--safety{background:var(--red);color:var(--on);box-shadow:none}
+.news__tag--visas{box-shadow:inset 0 0 0 1.5px var(--ink);color:var(--ink)}
+.news__h{font:700 clamp(17px,1.5vw,21px)/1.25 var(--f);letter-spacing:-.02em;text-decoration:none;text-wrap:pretty}
+.news__h:hover{color:var(--red)}
+.news__h::after{content:" \2197";color:var(--red);font-weight:500}
+.news__s{font-size:13.5px;color:var(--ink-2)}
+.news__i--region .news__h{font-weight:600}
+.news__empty{padding:24px 0;color:var(--ink-2);border-bottom:1px solid var(--rule)}
+
+/* ---------- home: monthly brief ---------- */
+.brief{padding:clamp(88px,10vw,150px) 0}
+.brief__grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px}
+.brief__list{grid-column:1/9}
+.brief__side{grid-column:10/13}
+.brief__side h3{font:800 24px/1.1 var(--f);letter-spacing:-.03em;margin:0 0 6px}
+.brief__side p{margin:0 0 18px;font-size:14px;color:var(--ink-2)}
+.brief__bar{display:grid;grid-template-columns:110px 1fr 28px;gap:10px;align-items:center;padding:7px 0;text-decoration:none;font-size:14.5px}
+.brief__bar i{height:10px;background:var(--land);position:relative}
+.brief__bar i::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--w) * 100%);background:var(--red)}
+.brief__bar b{text-align:right;font-variant-numeric:tabular-nums}
+.brief__bar:hover span{color:var(--red)}
+.brief__side .arrow{margin-top:18px;font-size:15px}
+@media (max-width:980px){.brief__list,.brief__side{grid-column:1/-1}.brief__side{margin-top:40px}}
+
+/* ---------- chapter page: news + official links ---------- */
+.cpn{padding:clamp(64px,7vw,110px) 0;border-top:1px solid var(--rule)}
+.cpn__grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px}
+.cpn__side{grid-column:1/5}
+.cpn__list{grid-column:6/13}
+.cpn__side .h2{font-size:clamp(30px,3.4vw,48px)}
+.cpn__stamp{margin:20px 0 22px;font-size:14px;color:var(--ink-2)}
+.cpn__meter{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:13px;color:var(--ink-2)}
+.cpn__meter i{height:8px;background:var(--land);position:relative}
+.cpn__meter i::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--w) * 100%);background:var(--red)}
+.cpn__meter b{color:var(--ink)}
+.cpn__note{font-size:13px;color:var(--ink-3);margin:16px 0 0}
+@media (max-width:900px){.cpn__side,.cpn__list{grid-column:1/-1}}
+.cpl{background:var(--ink);color:var(--on);padding:clamp(56px,6vw,96px) 0}
+.cpl .label{color:oklch(0.72 0.16 27)}
+.cpl__head{margin-bottom:28px}
+.cpl__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.cpl__i{display:grid;gap:8px;align-content:start;padding:20px;box-shadow:inset 0 0 0 1px var(--rule-on);text-decoration:none;color:var(--on);transition:background-color .2s}
+.cpl__i:hover{background:oklch(0.25 0.012 30)}
+.cpl__t{font:700 12.5px/1 var(--f);color:oklch(0.72 0.16 27)}
+.cpl__i b{font:700 18px/1.25 var(--f);letter-spacing:-.015em}
+.cpl__u{font-size:13px;color:oklch(0.78 0.01 30)}
+
+/* dossier news */
+.dos__news{list-style:none;margin:0 0 22px;padding:0;border-top:1px solid var(--rule)}
+.dos__news li{padding:10px 0;border-bottom:1px solid var(--rule);display:grid;gap:3px}
+.dos__news a{font-weight:600;font-size:15.5px;text-decoration:none;line-height:1.3}
+.dos__news a:hover{color:var(--red)}
+.dos__news span{font-size:12.5px;color:var(--ink-3)}
