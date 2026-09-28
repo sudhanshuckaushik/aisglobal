@@ -84,9 +84,10 @@ section[id]{scroll-margin-top:76px}
 /* ---------- nav ---------- */
 .nav{position:sticky;top:0;z-index:50;background:var(--red);color:var(--on)}
 .nav__in{display:flex;align-items:center;height:76px;gap:40px;border-bottom:1px solid var(--rule-on)}
-.logo{display:inline-grid;justify-items:start;text-decoration:none;color:inherit;line-height:1}
-.logo__mark{font:900 31px/.8 var(--f);letter-spacing:-.065em;margin-left:-1px;padding-top:2px}
-.logo__name{font:700 9.6px/1 var(--f);letter-spacing:.005em;margin-top:5px;padding-top:4px;border-top:1.5px solid currentColor;white-space:nowrap}
+.logo{display:inline-flex;text-decoration:none;color:inherit}
+.logo__word{font:800 21px/1 var(--f);letter-spacing:-.035em;white-space:nowrap}
+.logo__word br{display:none}
+@media (max-width:420px){.logo__word{font-size:18px;line-height:1.02;white-space:normal}.logo__word br{display:inline}}
 .nav__links{margin-left:auto;display:flex;gap:28px;font-weight:500;font-size:15px}
 .nav__links a{text-decoration:none;opacity:.9}
 .nav__links a:hover{opacity:1;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
@@ -405,8 +406,8 @@ section[id]{scroll-margin-top:76px}
 .foot{background:var(--ink);color:oklch(0.78 0.01 30);padding:72px 0 32px;font-size:15px}
 .foot__top{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;padding-bottom:48px;border-bottom:1px solid var(--rule-on)}
 .logo--foot{grid-column:1/5;color:var(--on);align-self:start}
-.logo--foot .logo__mark{font-size:84px}
-.logo--foot .logo__name{font-size:19px;margin-top:10px;padding-top:9px;border-top-width:2.5px}
+.logo--foot .logo__word{font-size:clamp(34px,4vw,52px);line-height:.98;letter-spacing:-.045em;white-space:normal}
+.logo--foot .logo__word br{display:inline}
 .foot__top p{grid-column:6/13;margin:0;color:var(--on);font-size:18px;max-width:58ch}
 .foot__cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;padding:48px 0}
 .foot__cols h3{font:700 13px/1 var(--f);color:oklch(0.72 0.16 27);margin:0 0 16px}
@@ -520,3 +521,4 @@ section[id]{scroll-margin-top:76px}
 .race__i p{margin:0 0 10px;color:var(--ink-2);font-size:15.5px}
 .race__i a{font-size:13px;color:var(--ink-3)}
 @media (max-width:860px){.race__i + .race__i{padding-left:0;border-left:0}}
+.foot__cols p a{display:inline;padding:0;text-decoration:underline;text-underline-offset:3px}

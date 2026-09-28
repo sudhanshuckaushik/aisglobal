@@ -19,7 +19,7 @@ const alpha = CH.slice().sort((a, b) => a.country.localeCompare(b.country));
 const regionName = { europe: 'Europe', asia: 'Asia-Pacific and Gulf', americas: 'Americas' };
 const place = c => (c.country === 'United States' ? 'the United States' : c.country === 'UAE' ? 'the UAE' : c.country === 'Netherlands' ? 'the Netherlands' : c.country === 'Czech Republic' ? 'the Czech Republic' : c.country);
 
-const LOGO = '<span class="logo__mark">AIS</span><span class="logo__name">Association of Indian Students</span>';
+const LOGO = '<span class="logo__word">Association of<br> Indian Students</span>';
 
 function head({ title, desc, url, jsonld }) {
   return `<!doctype html>
@@ -51,7 +51,7 @@ function head({ title, desc, url, jsonld }) {
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav">
   <div class="wrap nav__in">
-    <a class="logo" href="/" aria-label="AIS, Association of Indian Students, home">${LOGO}</a>
+    <a class="logo" href="/" aria-label="Association of Indian Students, home">${LOGO}</a>
     <nav class="nav__links" aria-label="Primary">
       <a href="/#mandate">Our mandate</a><a href="/chapters/">Chapters</a><a href="/#positions">Issues</a><a href="/#press">Press</a>
     </nav>
