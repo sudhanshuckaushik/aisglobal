@@ -604,3 +604,4 @@ section[id]{scroll-margin-top:76px}
 @media (max-width:900px){.chair{grid-template-columns:1fr}.chair__ph{max-width:360px}}
 @media (max-width:600px){.chair__cols{grid-template-columns:1fr}}
 .chair__ph{margin-bottom:12px}
+.team--page{padding-top:clamp(56px,6vw,96px)}
