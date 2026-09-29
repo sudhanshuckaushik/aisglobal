@@ -96,7 +96,8 @@ section[id]{scroll-margin-top:76px}
 .mnav{display:flex;flex-direction:column;padding:4px var(--gut) 20px;background:var(--red)}
 .mnav[hidden]{display:none}
 .mnav a{padding:14px 0;text-decoration:none;font:700 24px/1.1 var(--f);letter-spacing:-.03em;border-bottom:1px solid var(--rule-on)}
-@media (max-width:900px){.nav__links,.nav__cta{display:none}.nav__menu{display:block}}
+@media (max-width:1180px){.nav__links,.nav__cta{display:none}.nav__menu{display:block}}
+.nav__links a{white-space:nowrap}
 
 /* ---------- hero ---------- */
 .hero{background:var(--red);color:var(--on);padding-top:clamp(48px,6vw,88px);position:relative}
@@ -586,3 +587,20 @@ section[id]{scroll-margin-top:76px}
 .dos__news a{font-weight:600;font-size:15.5px;text-decoration:none;line-height:1.3}
 .dos__news a:hover{color:var(--red)}
 .dos__news span{font-size:12.5px;color:var(--ink-3)}
+
+/* ---------- leadership ---------- */
+.team{padding:clamp(88px,10vw,150px) 0;background:var(--paper)}
+.chair{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,4vw,64px);border-top:2px solid var(--ink);padding-top:clamp(28px,3vw,44px);align-items:start}
+.chair__ph{margin:0;max-width:416px;position:relative}
+.chair__ph img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;filter:saturate(.92) contrast(1.03)}
+.chair__ph::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:var(--red)}
+.chair__role{font:700 14px/1 var(--f);color:var(--red);margin:0 0 12px}
+.chair__name{font:800 clamp(44px,5.4vw,84px)/.9 var(--f);letter-spacing:-.055em;margin:0 0 24px}
+.chair__bio{font-size:clamp(17px,1.35vw,19px);line-height:1.55;margin:0 0 32px;max-width:62ch;color:var(--ink)}
+.chair__cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 32px}
+.chair__cols h4{font:700 12.5px/1 var(--f);color:var(--red);margin:0 0 10px;padding-top:12px;border-top:1px solid var(--rule)}
+.chair__cols ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.chair__cols li{font-size:15px;line-height:1.45;color:var(--ink-2)}
+@media (max-width:900px){.chair{grid-template-columns:1fr}.chair__ph{max-width:360px}}
+@media (max-width:600px){.chair__cols{grid-template-columns:1fr}}
+.chair__ph{margin-bottom:12px}
