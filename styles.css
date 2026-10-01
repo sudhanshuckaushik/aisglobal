@@ -410,7 +410,7 @@ section[id]{scroll-margin-top:76px}
 .logo--foot .logo__word{font-size:clamp(34px,4vw,52px);line-height:.98;letter-spacing:-.045em;white-space:normal}
 .logo--foot .logo__word br{display:inline}
 .foot__top p{grid-column:6/13;margin:0;color:var(--on);font-size:18px;max-width:58ch}
-.foot__cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;padding:48px 0}
+.foot__cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;padding:48px 0}
 .foot__cols h3{font:700 13px/1 var(--f);color:oklch(0.72 0.16 27);margin:0 0 16px}
 .foot__cols a{display:block;text-decoration:none;padding:5px 0;color:var(--on);overflow-wrap:anywhere}
 .foot__cols a:hover{text-decoration:underline;text-underline-offset:4px}
@@ -605,3 +605,15 @@ section[id]{scroll-margin-top:76px}
 @media (max-width:600px){.chair__cols{grid-template-columns:1fr}}
 .chair__ph{margin-bottom:12px}
 .team--page{padding-top:clamp(56px,6vw,96px)}
+
+/* issues: work-after-graduation chart */
+.pos li.pos__wide > div{grid-column:8/13}
+.pos li.pos__wide > div > p{margin:0 0 18px;color:oklch(0.8 0.01 30);font-size:16px}
+.wchart{display:grid;gap:4px;margin-top:4px}
+.wchart__r{display:grid;grid-template-columns:150px 1fr 104px;gap:12px;align-items:center;padding:6px 0;text-decoration:none;color:var(--on);font-size:14px}
+.wchart__r i{height:10px;background:oklch(0.98 0.008 60 / .12);position:relative}
+.wchart__r i::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--w) * 100%);background:oklch(0.62 0.19 27)}
+.wchart__r b{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.wchart__r:hover span{text-decoration:underline;text-underline-offset:3px}
+.wchart__note{font-size:12.5px !important;color:oklch(0.7 0.01 30) !important;margin:14px 0 0 !important}
+@media (max-width:860px){.pos li.pos__wide > div{grid-column:1/-1}.wchart__r{grid-template-columns:120px 1fr 90px;font-size:13px}}
