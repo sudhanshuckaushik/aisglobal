@@ -644,3 +644,4 @@ section[id]{scroll-margin-top:76px}
 .srcs__c summary span::after{content:" +";color:var(--red);font-weight:700}
 .srcs__c[open] summary span::after{content:" \2212"}
 .srcs__c .arrow{margin:12px 0 18px;font-size:14px}
+.srcs__studio{padding:16px 18px;background:var(--paper-2);color:var(--ink) !important}.srcs__studio a{color:var(--red)}
