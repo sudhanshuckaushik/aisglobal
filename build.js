@@ -135,6 +135,7 @@ function foot() {
       <p>To advocate for, protect and empower Indian students studying abroad through policy engagement, government relations, legal support and community building, in every country where they study.</p>
     </div>
     <nav class="foot__all" aria-label="All chapters"><h3>Chapters</h3>${chapterLinks()}</nav>
+    <a class="method method--link" href="/sources/"><span>Data and methodology</span><span>Every source on this site &rarr;</span></a>
     <div class="foot__base">
       <span>© ${new Date().getFullYear()} Association of Indian Students</span>
       <span><a href="mailto:hello@globalindianstudents.org">hello@globalindianstudents.org</a></span>
@@ -235,6 +236,74 @@ function hubPage() {
 ` + foot();
 }
 
+// sources page: method + every source used on the site, collected automatically
+function sourcesPage() {
+  const url = `${SITE}/sources/`;
+  const title = 'Data and methodology | Association of Indian Students';
+  const desc = 'How AIS sources its figures, and every source used on the site, by section and by chapter.';
+  const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const GENERIC = /^(read|source|sources|here|advisories|link)$/i;
+  const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } };
+  const strip = h => h.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&#x27;|&#39;|&rsquo;/g, '\u2019').replace(/&euro;/g, '\u20ac').replace(/\s+/g, ' ').replace(/\s+([,.])/g, '$1').trim();
+  // for generic link text, name the thing the link supports: the person, the issue, or the row
+  function context(html, idx) {
+    const before = html.slice(Math.max(0, idx - 1500), idx);
+    const pn = [...before.matchAll(/class="p-n">([^<]+)</g)].pop();
+    const h3 = [...before.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>/g)].pop();
+    const pnAt = pn ? before.lastIndexOf(pn[0]) : -1, h3At = h3 ? before.lastIndexOf(h3[0]) : -1;
+    if (pnAt > h3At) return strip(pn[1]);
+    return h3 ? strip(h3[1]) : '';
+  }
+  function fromSection(id, label) {
+    const m = home.match(new RegExp('<section[^>]*id="' + id + '"[\\s\\S]*?</section>'));
+    if (!m) return '';
+    const seen = new Set(), items = [];
+    for (const a of m[0].matchAll(/<a[^>]+href="(https?:[^"]+)"[^>]*>([\s\S]*?)<\/a>/g)) {
+      const u = a[1].replace(/&amp;/g, '&'); if (seen.has(u)) continue; seen.add(u);
+      let t = strip(a[2]);
+      if (/wchart__r/.test(a[0])) t = 'Work after graduating: ' + t.replace(/ (\d+ months)$/, ', $1');
+      else if (!t || GENERIC.test(t) || t.length < 4) { const c = context(m[0], a.index); t = c ? c + ' (' + host(u) + ')' : host(u); }
+      items.push(`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a> <span>${esc(host(u))}</span></li>`);
+    }
+    return items.length ? `<section class="srcs__g"><h2>${esc(label)}</h2><ul>${items.join('')}</ul></section>` : '';
+  }
+  // the ledger section has no id; tag it
+  const sections = [['main-why', 'Why it matters'], ['case', 'The case for Indian students'], ['positions', 'The issues'], ['mandate', 'Our mandate'], ['press', 'Press coverage']];
+  const why = home.match(/<section class="why">[\s\S]*?<\/section>/);
+  let blocks = '';
+  if (why) {
+    const seen = new Set(), items = [];
+    for (const a of why[0].matchAll(/<a[^>]+href="(https?:[^"]+)"[^>]*>([\s\S]*?)<\/a>/g)) { const u = a[1].replace(/&amp;/g, '&'); if (seen.has(u)) continue; seen.add(u); items.push(`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(strip(a[2]) || host(u))}</a> <span>${esc(host(u))}</span></li>`); }
+    blocks += `<section class="srcs__g"><h2>Headline figures</h2><ul><li><a href="https://monitor.icef.com/2025/12/the-number-of-indian-students-abroad-fell-in-2025/" target="_blank" rel="noopener">India MEA data on Indian students abroad, as on 1 January 2025 (via ICEF Monitor)</a> <span>monitor.icef.com</span></li>${items.join('')}</ul></section>`;
+  }
+  sections.slice(1).forEach(([id, label]) => { blocks += fromSection(id, label); });
+  const chapters = alpha.map(c => {
+    const seen = new Set(), li = [];
+    const add = (u, t) => { if (!u || seen.has(u)) return; seen.add(u); li.push(`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t || host(u))}</a> <span>${esc(host(u))}</span></li>`); };
+    add(c.students.url, `${c.students.source} (Indian students, ${c.students.periodFull || c.students.period})`);
+    (c.stats || []).forEach(s => s[2] && add(s[2], `${s[1]}: ${s[0]}`));
+    (c.sources || []).forEach(s => add(s[0], s[1]));
+    if (c.fact && c.fact.url) add(c.fact.url, 'Key fact');
+    return `<details class="srcs__c"><summary><b>${esc(c.country)}</b><span>${li.length} sources</span></summary><ul>${li.join('')}</ul><a class="arrow" href="/chapters/${slug(c)}/">Open the ${esc(c.country)} chapter page</a></details>`;
+  }).join('');
+  const body = `<section class="srcs"><div class="wrap">
+    <p class="label">Data and methodology</p>
+    <h1 class="h2">Every number on this site, and where it comes from.</h1>
+    <div class="srcs__method">
+      <p>Every figure on this site links to its source. We use government statistics, education agencies, international organisations and established education research outlets. Where a host country does not publish counts by nationality, we use India's Ministry of External Affairs data on Indian students abroad.</p>
+      <p>Figures refer to different years and use different definitions, so they are not a single snapshot. Each chapter shows the period its figure covers. Where we could not verify a number, we left it out.</p>
+      <p>Chapter news is gathered automatically on the 1st of every month from Google News search feeds. A headline must name the country and be about Indian or international students; study-abroad marketing, listicles and press releases are excluded. Headlines link to the original reporting, and AIS does not endorse third-party coverage.</p>
+      <p>The world map uses Natural Earth's India point-of-view edition, which shows Jammu and Kashmir, Ladakh and Arunachal Pradesh as on Survey of India maps.</p>
+      <p class="srcs__upd">Last reviewed ${esc(fmtLong(new Date().toISOString()))}. Spotted an error? Write to <a href="mailto:hello@globalindianstudents.org?subject=Data%20correction">hello@globalindianstudents.org</a>.</p>
+    </div>
+    <div class="srcs__groups">${blocks}</div>
+    <h2 class="srcs__ch">By chapter</h2>
+    <div class="srcs__chs">${chapters}</div>
+  </div></section>`;
+  const jsonld = { '@context': 'https://schema.org', '@type': 'WebPage', url, name: title, description: desc, isPartOf: { '@id': `${SITE}/#website` } };
+  return head({ title, desc, url, jsonld }) + body + foot();
+}
+
 // team page
 function teamPage() {
   const url = `${SITE}/team/`;
@@ -245,7 +314,9 @@ function teamPage() {
   return head({ title, desc, url, jsonld }) + fs.readFileSync(path.join(ROOT, 'partials', 'team.html'), 'utf8') + foot();
 }
 fs.mkdirSync(path.join(ROOT, 'team'), { recursive: true });
+fs.mkdirSync(path.join(ROOT, 'sources'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'team', 'index.html'), teamPage());
+fs.writeFileSync(path.join(ROOT, 'sources', 'index.html'), sourcesPage());
 
 // write pages
 fs.mkdirSync(path.join(ROOT, 'chapters'), { recursive: true });
@@ -266,7 +337,7 @@ fs.writeFileSync(path.join(ROOT, 'index.html'), home);
 if (NEWS) fs.writeFileSync(path.join(ROOT, 'data', 'news.js'), '// generated by build.js from data/news.json\nwindow.AIS_NEWS = ' + JSON.stringify({ updated: NEWS.updated, countries: Object.fromEntries(Object.entries(NEWS.countries).map(([k, v]) => [k, v.filter(i => !i.region).slice(0, 3)])) }) + ';\n');
 
 // sitemap + robots
-const urls = [`${SITE}/`, `${SITE}/chapters/`, `${SITE}/team/`, ...alpha.map(c => `${SITE}/chapters/${slug(c)}/`)];
+const urls = [`${SITE}/`, `${SITE}/chapters/`, `${SITE}/team/`, `${SITE}/sources/`, ...alpha.map(c => `${SITE}/chapters/${slug(c)}/`)];
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 fs.writeFileSync(path.join(ROOT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 console.log('built', CH.length, 'chapter pages, hub, sitemap (' + urls.length + ' urls)');

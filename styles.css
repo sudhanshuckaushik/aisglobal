@@ -617,3 +617,30 @@ section[id]{scroll-margin-top:76px}
 .wchart__r:hover span{text-decoration:underline;text-underline-offset:3px}
 .wchart__note{font-size:12.5px !important;color:oklch(0.7 0.01 30) !important;margin:14px 0 0 !important}
 @media (max-width:860px){.pos li.pos__wide > div{grid-column:1/-1}.wchart__r{grid-template-columns:120px 1fr 90px;font-size:13px}}
+
+/* ---------- data and methodology ---------- */
+.method--link{display:flex;justify-content:space-between;gap:16px;padding:20px 0;border-top:1px solid var(--rule-on);border-bottom:1px solid var(--rule-on);font-weight:700;color:var(--on);text-decoration:none}
+.method--link span:last-child{font-weight:500;color:oklch(0.78 0.01 30)}
+.method--link:hover span:last-child{color:var(--on)}
+.srcs{padding:clamp(56px,6vw,96px) 0 clamp(80px,9vw,140px)}
+.srcs .h2{max-width:18ch;margin-bottom:36px}
+.srcs__method{max-width:72ch;border-top:2px solid var(--ink);padding-top:24px;margin-bottom:56px}
+.srcs__method p{margin:0 0 16px;color:var(--ink-2)}
+.srcs__method a{color:var(--red);font-weight:600}
+.srcs__upd{font-size:14px}
+.srcs__groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:40px 48px;margin-bottom:64px}
+.srcs__g h2,.srcs__ch{font:800 clamp(22px,2vw,28px)/1.1 var(--f);letter-spacing:-.03em;margin:0 0 14px;padding-top:14px;border-top:2px solid var(--ink)}
+.srcs ul{list-style:none;margin:0;padding:0}
+.srcs li{padding:9px 0;border-bottom:1px solid var(--rule);font-size:15px;line-height:1.4}
+.srcs li a{color:var(--ink);text-decoration:none;font-weight:600}
+.srcs li a:hover{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+.srcs li span{display:block;font-size:12.5px;color:var(--ink-3)}
+.srcs__chs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:0 32px}
+.srcs__c{border-bottom:1px solid var(--rule)}
+.srcs__c summary{display:flex;justify-content:space-between;padding:14px 0;cursor:pointer;list-style:none}
+.srcs__c summary::-webkit-details-marker{display:none}
+.srcs__c summary b{font-size:17px}
+.srcs__c summary span{font-size:13.5px;color:var(--ink-3)}
+.srcs__c summary span::after{content:" +";color:var(--red);font-weight:700}
+.srcs__c[open] summary span::after{content:" \2212"}
+.srcs__c .arrow{margin:12px 0 18px;font-size:14px}
